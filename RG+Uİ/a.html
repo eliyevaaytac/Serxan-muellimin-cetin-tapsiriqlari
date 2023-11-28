@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xəstəxana İdarəetmə və güvənlik Sistemi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        header {
+            background-color: #1eff62;
+            color: #fff;
+            padding: 1em;
+            text-align: center;
+        }
+
+        main {
+            margin: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .user-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .user-card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: 30%;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #1E90FF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-filter {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .filter-button {
+            margin-left: 10px;
+            padding: 10px;
+            background-color: #1E90FF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #1E90FF;
+            color: #fff;
+            padding: 1em;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Xəstəxana İdarəetmə və güvənlik Sistemi</h1>
+    </header>
+
+    <main>
+        <div class="form-container" id="loginForm">
+            <h2>Giriş</h2>
+            <form onsubmit="return showInterface()">
+                <label for="username" style="color: #1E90FF;">İstifadəçi adı:</label>
+                <input type="text" id="username" name="username" class="form-input" required>
+
+                <label for="password" style="color: #1E90FF;">Şifrə:</label>
+                <input type="password" id="password" name="password" class="form-input" required>
+
+                <button type="submit" class="form-button">Giriş</button>
+            </form>
+        </div>
+
+        <!-- Həkim interfeysi -->
+        <div class="user-section" id="doctorInterface" style="display: none;">
+            <div class="user-card">
+                <h3>Xəstə Məlumatları</h3>
+                <div class="search-filter">
+                    <input type="text" id="patientSearch" class="search-input" placeholder="Xəstə axtar">
+                    <button onclick="searchPatients()" class="filter-button">Axtar</button>
+                </div>
+                <!-- Həkimin görməsini istədiyiniz məlumatları əlavə edin -->
+                <button class="back-button" onclick="goBack()">Geriye qayıt</button>
+            </div>
+        </div>
+
+        <!-- Mühasib interfeysi -->
+        <div class="user-section" id="accountantInterface" style="display: none;">
+            <div class="user-card">
+                <h3>İşçi Məlumatları</h3>
+                <div class="search-filter">
+                    <input type="text" id="employeeSearch" class="search-input" placeholder="İşçi axtar">
+                    <button onclick="searchEmployees()" class="filter-button">Axtar</button>
+                </div>
+                <!-- Mühasibin görməsini istədiyiniz məlumatları əlavə edin -->
+                <button class="back-button" onclick="goBack()">Geriye qayıt</button>
+            </div>
+        </div>
+
+        <!-- Reseption interfeysi -->
+        <div class="user-section" id="receptionInterface" style="display: none;">
+            <div class="user-card">
+                <h3>Xəstə Məlumatları</h3>
+                <div class="search-filter">
+                    <input type="text" id="receptionSearch" class="search-input" placeholder="Ad və soyad axtar">
+                    <button onclick="searchPatients()" class="filter-button">Axtar</button>
+                </div>
+                <!-- Reseptionun görməsini istədiyiniz məlumatları əlavə edin -->
+                <button class="back-button" onclick="goBack()">Geriye qayıt</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Xəstəxana İdarəetmə Sistemi</p>
+    </footer>
+
+    <script>
+        function showInterface() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // Simulyasiya üçün sabit istifadəçi adı və şifrə
+            var doctorUsername = "doctor";
+            var doctorPassword = "doctorpass";
+            var accountantUsername = "accountant";
+            var accountantPassword = "accountantpass";
+            var receptionUsername = "reception";
+            var receptionPassword = "receptionpass";
+
+            if (username === doctorUsername && password === doctorPassword) {
+                showDoctorInterface();
+            } else if (username === accountantUsername && password === accountantPassword) {
+                showAccountantInterface();
+            } else if (username === receptionUsername && password === receptionPassword) {
+                showReceptionInterface();
+            } else {
+                alert("Yanlış istifadəçi adı və ya şifrə.");
+            }
+
+            return false; // Formun submit olmasını dayandırmaq üçün
+        }
+
+        function showDoctorInterface() {
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("doctorInterface").style.display = "flex";
+        }
+
+        function showAccountantInterface() {
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("accountantInterface").style.display = "flex";
+        }
+
+        function showReceptionInterface() {
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("receptionInterface").style.display = "flex";
+        }
+
+        function goBack() {
+            document.getElementById("loginForm").style.display = "block";
+            document.getElementById("doctorInterface").style.display = "none";
+            document.getElementById("accountantInterface").style.display = "none";
+            document.getElementById("receptionInterface").style.display = "none";
+        }
+
+        function searchPatients() {
+            var searchValue = document.getElementById("receptionSearch").value;
+            alert("Axtarış nəticələri (Reseption): " + searchValue);
+            // Burada resepsiyonun xəstələri üçün axtarış əməliyyatları ediləcək
+        }
+
+        function searchEmployees() {
+            var searchValue = document.getElementById("employeeSearch").value;
+            alert("Axtarış nəticələri (Mühasib): " + searchValue);
+            // Burada mühasibin işçiləri üçün axtarış əməliyyatları ediləcək
+        }
+    </script>
+
+</body>
+</html>
